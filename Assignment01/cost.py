@@ -7,11 +7,11 @@
 # Import necessary libraries.
 import numpy as np
 
-def costFunction(X : np.array, y : np.array, theta : np.array):
+def cost_function(X : np.array, y : np.array, theta : np.array):
     """
     Return half the mean squared error.
 
-    Input: X (Features), y (predictions), theta (parameters).
+    Input: X (Data set), y (predictions), theta (parameters).
     """
 
     # Calculate the hypothesis/prediction.

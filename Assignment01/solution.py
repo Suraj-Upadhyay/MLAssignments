@@ -11,37 +11,82 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Import helper modules.
-from cost import costFunction
-from gradient_descent import gradientDescent
+from cost import cost_function
+from gradient_descent import gradient_descent
 
-if __name__ == "__main__" :
-
+def getoptions() :
+    """
+    Get the command line arguments.
+    """
     if len(sys.argv) != 4 :
-        print("Correct use : gradientDescent.py datafilename iteration alpha")
+        print("Correct use : solution.py `datafilename` `iteration` `alpha`")
         exit()
 
-    fileName = sys.argv[1]
+    file_name = sys.argv[1]
     iter = int(sys.argv[2])
     alpha = float(sys.argv[3])
 
-    cwd = os.getcwd()
-    data = np.loadtxt(cwd+'/'+fileName)
+    return [file_name, iter, alpha]
 
+def load_and_decorate_data(file_name) :
+    """
+    Load the data and convert them into appropriate expected format.
+
+    Input: file_name (String).
+    Output: X (Data set), y (Target variable),
+            theta (parameter vector initialized with zero).
+    Expects the data file to be in the current working directory.
+    """
+
+    # Get the path of the current working directory.
+    cwd = os.getcwd()
+    data = np.loadtxt(cwd+'/'+file_name)
+
+    # Number of training sets.
     m = len(data)
-    n = len(data[0])
-    n -= 1
+    # Number of features.
+    n = len(data[0]) - 1
+
+    # Prepare the feature vector.
     X = data[:, :n]
+    X = np.hstack((np.ones((m, 1)), X))
+
+    # Prepare the target vector.
     y = data[:, -1].reshape((m, 1))
-    X0 = np.ones((m, 1))
-    X = np.hstack((X0, X))
-    theta = np.zeros((n+1, 1), dtype=np.float128)
+    # Parameter vector : Initialized to zero
+    theta = np.zeros((n + 1, 1))
+
+    # Cast all the values to appropriately big and precise data type.
     X.astype(np.float128)
     y.astype(np.float128)
+    theta.astype(np.float128)
 
-    theta , costHistory = gradientDescent(X, y, alpha, theta, iter)
+    return [X, y, theta]
 
-    print(len(costHistory))
-    print(theta, '\n', costFunction(X,y,theta))
+def main() :
+    """
+    The driver function for Linear Regression with Gradient Descent.
 
-    plt.plot(costHistory)
+    Loads the data and prepares it into appripriate format for the rest
+    of the program.
+    Runs the Gradient Descent for the data loaded.
+    Prints and plots the run information.
+    """
+    # Load data in an appropriate fromat for Gradient Descent.
+    file_name, iter, alpha = getoptions()
+    X, y, theta = load_and_decorate_data(file_name)
+
+    # Get the optimal parameter vector and
+    # the history of Gradient Descent.
+    theta , cost_history = gradient_descent(X, y, alpha, theta, iter)
+
+    # Print the algorithm data.
+    print(len(cost_history))
+    print(theta, '\n', cost_function(X, y, theta))
+
+    # Plot run history of Gradient Descent.
+    plt.plot(cost_history)
     plt.show()
+
+if __name__ == "__main__" :
+    main()

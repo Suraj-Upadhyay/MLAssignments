@@ -7,6 +7,19 @@
 # Import necessary libraries.
 import numpy as np
 
-def gradient(X, y, theta) :
+def gradient(X : np.array, y : np.array, theta : np.array) -> np.array :
+    """
+    Calculate the derivative of the cost function w.r.t. the parameter vector.
+
+    Input: X (Data set), y (Target variable), theta (Parameter vector).
+    Output: Returns a vector of partial derivative of the cost function
+            w.r.t. every parameter in theta.
+    """
+
+    # Number of features.
     n = len(X[0])
-    return np.sum((X @ theta - y) * X, axis = 0).reshape((n, 1))
+
+    # Calculate the derivative of the cost function.
+    derivative = np.sum((X @ theta - y) * X, axis = 0)
+
+    return derivative.reshape((n, 1)) # Return in a form expected.
