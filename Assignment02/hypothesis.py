@@ -9,7 +9,7 @@ import numpy as np
 import sys
 
 # Helper funcition for calculating the hypothesis.
-def _sigmoid_function(expression_vector : np.array) -> float :
+def _sigmoid_function(expression_vector : np.array) -> np.array :
     """
     Calculate the sigmoid function.
 
@@ -30,7 +30,7 @@ def _sigmoid_function(expression_vector : np.array) -> float :
         return 0
     return ret
 
-def hypothesis(X : np.array, theta: np.array) -> float :
+def hypothesis(X : np.array, theta: np.array) -> np.array :
     """
     Calculate the hypothesis for logistic regression.
 
