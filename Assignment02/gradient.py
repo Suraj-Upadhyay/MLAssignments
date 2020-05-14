@@ -10,7 +10,7 @@ import numpy as np
 # Import helper libraries.
 from hypothesis import hypothesis
 
-def gradient(X : np.array, y : np.array, theta : np.array) -> np.array :
+def gradient(theta : np.array, X : np.array, y : np.array) -> np.array :
     """
     Calculate the derivative of the cost function w.r.t. the parameter vector.
 
@@ -27,11 +27,7 @@ def gradient(X : np.array, y : np.array, theta : np.array) -> np.array :
     -------
     A vector of partial derivative of the cost function w.r.t. every parameter in theta.
     """
-
-    # Number of features.
-    n = len(X[0])
-
     # Calculate the derivative of the cost function.
     derivative = np.sum((hypothesis(X, theta) - y) * X, axis = 0)
 
-    return derivative.reshape((n, 1)) # Return in a form expected.
+    return derivative

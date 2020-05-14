@@ -47,10 +47,11 @@ def hypothesis(X : np.array, theta: np.array) -> np.array :
     The value of the hypothesis.
     """
 
+    m = len(X)
     # Return the sigmoid function value for
     # the product of features and their respective
     # parameters.
-    return _sigmoid_function(X @ theta)
+    return _sigmoid_function(X @ theta).reshape((m, 1))
 
 # Driver to independently run and test
 # the sigmoid function.
