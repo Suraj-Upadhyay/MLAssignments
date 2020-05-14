@@ -12,8 +12,8 @@ import os
 
 # Import helper librarires.
 from hypothesis import hypothesis
-from gradient import gradient
 from plot_data import plot_data
+from gradient import gradient
 from cost import cost
 
 def getoptions() :
@@ -21,7 +21,7 @@ def getoptions() :
         print("Incorrect Usage")
         print("Should use : python solution.py __datafilename__")
         exit()
-    
+
     return sys.argv[1]
 
 def load_and_decorate_data(file_name) :
@@ -59,7 +59,7 @@ def main() :
     X, y, theta = load_and_decorate_data(file_name)
     optimal_theta = spo.fmin_bfgs(cost, theta, gradient, args = (X, y),
                                   disp = False)
-    print(optimal_theta)
+    plot_data(X, y, optimal_theta)
 
 if __name__ == "__main__" :
     main()
