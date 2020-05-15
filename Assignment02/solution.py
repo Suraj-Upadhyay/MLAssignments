@@ -16,7 +16,7 @@ from plot_data import plot_data
 from gradient import gradient
 from cost import cost
 
-def getoptions() :
+def getoptions() -> str:
     if (len(sys.argv) != 2) :
         print("Incorrect Usage")
         print("Should use : python solution.py __datafilename__")
@@ -24,7 +24,7 @@ def getoptions() :
 
     return sys.argv[1]
 
-def load_and_decorate_data(file_name) :
+def load_and_decorate_data(file_name : str) -> list:
     """
     Load the data and convert them into appropriate expected format.
 
@@ -54,11 +54,70 @@ def load_and_decorate_data(file_name) :
 
     return [X, y, theta]
 
+def predict(features : np.array, theta : np.array, threshold : float) -> np.array:
+    """
+    Predict target variable based on the calculated logistic regression model.
+
+    Parameters
+    ----------
+    features :  Numpy array.
+                Feature set. It can be vector or a fully formed data set.
+    
+    theta    :  Numpy array.
+                The parameters to use in the model.
+    
+    threshold : float.
+                The decisive threshold value for prediction.
+    
+    Returns
+    -------
+    prediction :    Numpy array.
+                    Prediction vector, containing bool values.
+    """
+
+    # The model outputs the probability for
+    # the feature set to be in the positive class.
+    probabilites = hypothesis(features, theta)
+
+    # Obtain prediction based on
+    # the probabilities and the threshold value.
+    prediction = (probabilites >= threshold)
+    return prediction
+
+def model_accuracy(X : np.array, y : np.array, \
+                   theta : np.array, threshold : float) -> float :
+    """
+    Predict accuracy of the model provided by the hypothesis function.
+
+    Parameters
+    ----------
+    X : Numpy array.
+        Data set.
+    
+    y : Numpy array.
+        Target variable.
+    
+    theta : Numpy array.
+            Parameter vector.
+    
+    Returns
+    -------
+    accuracy : int.
+               Returns the accuracy of the model on the data set and target variable
+               provided, in percentage.
+    """
+
+    prediction = predict(X, theta, threshold)
+    _accuracy = (prediction == y)
+    accuracy = np.sum(_accuracy) / len(_accuracy)
+    return accuracy
+
 def main() :
     file_name = getoptions()
     X, y, theta = load_and_decorate_data(file_name)
     optimal_theta = spo.fmin_bfgs(cost, theta, gradient, args = (X, y),
                                   disp = False)
+    print(model_accuracy(X, y, optimal_theta, 0.5))
     plot_data(X, y, optimal_theta)
 
 if __name__ == "__main__" :
